@@ -212,3 +212,7 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+*.vcxproj
+*.vcxproj.filters
+*.sln
+*.sdf
