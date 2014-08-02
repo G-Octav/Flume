@@ -1,82 +1,79 @@
+#include <SFGUI/SFGUI.hpp>
 #include <SFML/Graphics.hpp>
 
-// Always include the necessary header files.
-// Including SFGUI/SFGUI.hpp includes everything
-// you can possibly need automatically.
-#include <SFGUI/SFGUI.hpp>
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 
-int main() {
-	// Create the main SFML window
-	sf::RenderWindow app_window(sf::VideoMode(800, 600), "SFGUI Notebook Example", sf::Style::Titlebar | sf::Style::Close);
+class HelloWorld {
+	public:
+		void OnButtonClick();
 
-	// We have to do this because we don't use SFML to draw.
-	app_window.resetGLStates();
+		void Run();
 
-	// Create an SFGUI. This is required before doing anything with SFGUI.
-	sfg::SFGUI sfgui;
+	private:
+		sfg::SFGUI m_sfgui;
+		sfg::Label::Ptr m_label;
+};
 
-	// Create our main SFGUI window
+void HelloWorld::OnButtonClick() {
+	m_label->SetText("Hello SFGUI, pleased to meet you!");
+}
+
+void HelloWorld::Run() {
+	sf::RenderWindow render_window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Hello world!");
+
+	m_label = sfg::Label::Create("Hello world!");
+
+	auto button = sfg::Button::Create("Greet SFGUI!");
+	button->GetSignal(sfg::Widget::OnLeftClick).Connect(std::bind(&HelloWorld::OnButtonClick, this));
+
+	auto frame = sfg::Frame::Create("Info");
+	auto lb1 = sfg::Label::Create("loremipsum lorem ipsum \nlorem ipsum lorem ipsum lorem ipsum lorem \nipsum lorem ipsum");
+
+	frame->Add(lb1);
+
+	auto box = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
+	box->Pack(m_label);
+	box->Pack(frame);
+	box->Pack(button, false);
+
+	box->SetRequisition(sf::Vector2f(100,100));
+
 	auto window = sfg::Window::Create();
-	window->SetTitle("Title");
+	window->SetTitle("Hello world!");
+	window->Add(box);
+	window->SetPosition(sf::Vector2f(render_window.getSize().x/2, render_window.getSize().y/2));
 
-	// Create the notebook.
-	auto notebook = sfg::Notebook::Create();
+	sfg::Desktop desktop;
+	desktop.Add(window);
 
-	// Create a couple of buttons to populate the notebook.
-	auto button1 = sfg::Button::Create("Hello");
-	auto button2 = sfg::Button::Create("World");
+	render_window.resetGLStates();
 
-	// Add new pages to the notebook with respective tab labels
-	// containing solely the buttons as their children.
-	notebook->AppendPage(button1, sfg::Label::Create("Page 1"));
-	notebook->AppendPage(button2, sfg::Label::Create("Page 2"));
-	notebook->AppendPage(sfg::Label::Create(), sfg::Label::Create("Page 3"));
-	notebook->AppendPage(sfg::Label::Create(), sfg::Label::Create("Page 4"));
-	notebook->AppendPage(sfg::Label::Create(), sfg::Label::Create("Page 5"));
-	notebook->AppendPage(sfg::Label::Create(), sfg::Label::Create("Page 6"));
-	notebook->AppendPage(sfg::Label::Create(), sfg::Label::Create("Page 7"));
-	notebook->AppendPage(sfg::Label::Create(), sfg::Label::Create("Page 8"));
-
-	notebook->SetScrollable(true);
-	notebook->SetRequisition(sf::Vector2f(200.f, 0.f));
-
-	// Add the notebook to the window.
-	window->Add(notebook);
-
+	sf::Event event;
 	sf::Clock clock;
 
-	// Start the game loop
-	while (app_window.isOpen()) {
-		// Process events
-		sf::Event event;
+	while (render_window.isOpen()) {
+		while (render_window.pollEvent(event)) {
+			desktop.HandleEvent(event);
 
-		while (app_window.pollEvent(event)) {
-			// Handle events
-			window->HandleEvent(event);
-
-			// Close window : exit
 			if (event.type == sf::Event::Closed) {
-				app_window.close();
+				render_window.close();
 			}
 		}
 
-		// Update the GUI every 5ms
-		if (clock.getElapsedTime().asMicroseconds() >= 5000) {
-			// Update() takes the elapsed time in seconds.
-			window->Update(static_cast<float>(clock.getElapsedTime().asMicroseconds()) / 1000000.f);
+		desktop.Update(clock.restart().asSeconds());
 
-			clock.restart();
-		}
-
-		// Clear screen
-		app_window.clear();
-
-		// Draw the GUI
-		sfgui.Display(app_window);
-
-		// Update the window
-		app_window.display();
+		// Rendering.
+		render_window.clear();
+		m_sfgui.Display(render_window);
+		render_window.display();
 	}
+}
 
-	return EXIT_SUCCESS;
+int main() 
+{
+	HelloWorld hello_world;
+	hello_world.Run();
+
+	return 0;
 }
