@@ -10,7 +10,10 @@
 	Application::Application() 
 	: window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Flume Tiled Map Editor")
 	{
-		
+		auto box = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
+		auto button_row = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL, 5.0f);
+		auto button1 = sfg::Button::Create("New layer");
+		auto button2 = sfg::Button::Create("Load Tileset");
 	}
 
 /* ----------------------------------------------------------------------
