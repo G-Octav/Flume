@@ -10,10 +10,24 @@
 	Application::Application() 
 	: window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Flume Tiled Map Editor")
 	{
+		auto tools = sfg::Window::Create();
 		auto box = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
 		auto button_row = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL, 5.0f);
 		auto button1 = sfg::Button::Create("New layer");
 		auto button2 = sfg::Button::Create("Load Tileset");
+		auto infoframe = sfg::Frame::Create("info");
+
+		tools->SetTitle("Tool window");
+		
+		auto infotext = sfg::Label::Create("This is the alpha version of Flume.");
+		infoframe->Add(infotext);
+
+		button_row->Pack(button1, false, false);
+		button_row->Pack(button2, false, false);
+		box->Pack(button_row);
+		box->Pack(infoframe);
+		tools->Add(box);
+		desktop.Add(tools);
 	}
 
 /* ----------------------------------------------------------------------
