@@ -10,7 +10,7 @@
 * ----------------------------------------------------------------------
 */
 Application::Application()
-	: window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Flume Tiled Map Editor")
+	: window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Flume Tiled Map Editor", sf::Style::None)
 	, map("nothing")
 	, hoverRect(sf::Vector2f(32,32))
 	, snapSize(TILE_SIZE)
@@ -37,6 +37,7 @@ Application::Application()
 		auto listBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
 		window.setFramerateLimit(60);
+		window.setPosition(sf::Vector2i(0, 0));
 		hoverRect.setFillColor(sf::Color(112,146,190));
 		tools->SetStyle(tools->GetStyle() ^ sfg::Window::TITLEBAR);
 		scrolledwindow->SetScrollbarPolicy(sfg::ScrolledWindow::HORIZONTAL_NEVER | sfg::ScrolledWindow::VERTICAL_AUTOMATIC);
@@ -117,8 +118,8 @@ Application::Application()
 			}
 
 			sf::Vector2f mousePos = (sf::Vector2f) sf::Mouse::getPosition(window);
-			mousePos.x = mousePos.x - fmod(mousePos.x, snapSize);
-			mousePos.y = mousePos.y - fmod(mousePos.y, snapSize);
+			mousePos.x = (float) (mousePos.x - fmod(mousePos.x, snapSize));
+			mousePos.y = (float) (mousePos.y - fmod(mousePos.y, snapSize));
 			hoverRect.setPosition(mousePos);
 
 			desktop.Update(clock.restart().asSeconds());

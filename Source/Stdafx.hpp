@@ -14,7 +14,7 @@ const int TILES_PER_ROW = 8;
 const int TILE_SIZE = 32;
 
 const int SCREEN_WIDTH = 1290;
-const int SCREEN_HEIGHT = 900;
+const int SCREEN_HEIGHT = 964;
 
 int toCategory(std::string string);
 
