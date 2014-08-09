@@ -13,16 +13,17 @@
 const int TILES_PER_ROW = 8;
 const int TILE_SIZE = 32;
 
-const int SCREEN_HEIGHT = 1020;
 const int SCREEN_WIDTH = 1290;
+const int SCREEN_HEIGHT = 900;
 
 int toCategory(std::string string);
 
-// Some colors for the logging
+// Some colors
 const sf::Color error_color = sf::Color(221, 61, 6);
 const sf::Color success_color = sf::Color(110, 201, 28);
 const sf::Color warning_color = sf::Color(225, 174, 0);
 const sf::Color collision_debug_color = sf::Color::Green;
+const sf::Color grid_color = sf::Color(50,50,50);
 
 
 

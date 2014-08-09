@@ -9,8 +9,11 @@
 * Description: Constructs an application.
 * ----------------------------------------------------------------------
 */
-	Application::Application() 
+Application::Application()
 	: window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Flume Tiled Map Editor")
+	, map("nothing")
+	, hoverRect(sf::Vector2f(32,32))
+	, snapSize(TILE_SIZE)
 	{
 		auto box1 = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 0.0f);
 		auto box2 = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 0.0f);
@@ -33,6 +36,8 @@
 		auto tilesettab = sfg::Notebook::Create();
 		auto listBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
+		window.setFramerateLimit(60);
+		hoverRect.setFillColor(sf::Color(112,146,190));
 		tools->SetStyle(tools->GetStyle() ^ sfg::Window::TITLEBAR);
 		scrolledwindow->SetScrollbarPolicy(sfg::ScrolledWindow::HORIZONTAL_NEVER | sfg::ScrolledWindow::VERTICAL_AUTOMATIC);
 		tilesettab->AppendPage(sfg::Label::Create(), sfg::Label::Create("   Tileset   "));
@@ -111,9 +116,16 @@
 					window.close();
 			}
 
+			sf::Vector2f mousePos = (sf::Vector2f) sf::Mouse::getPosition(window);
+			mousePos.x = mousePos.x - fmod(mousePos.x, snapSize);
+			mousePos.y = mousePos.y - fmod(mousePos.y, snapSize);
+			hoverRect.setPosition(mousePos);
+
 			desktop.Update(clock.restart().asSeconds());
 
-			window.clear();
+			window.clear(sf::Color(25,25,25));
+			window.draw(map.getMapGrid());
+			window.draw(hoverRect);
 			m_sfgui.Display(window);
 			window.display();
 		}
