@@ -35,6 +35,7 @@ Application::Application()
 		auto scrolledwindow = sfg::ScrolledWindow::Create();
 		auto tilesettab = sfg::Notebook::Create();
 		auto listBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
+		auto directoryListing = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
 		window.setFramerateLimit(60);
 		window.setPosition(sf::Vector2i(0, 0));
@@ -43,7 +44,7 @@ Application::Application()
 		scrolledwindow->SetScrollbarPolicy(sfg::ScrolledWindow::HORIZONTAL_NEVER | sfg::ScrolledWindow::VERTICAL_AUTOMATIC);
 		tilesettab->AppendPage(sfg::Label::Create(), sfg::Label::Create("   Tileset   "));
 		tilesettab->AppendPage(sfg::Label::Create(), sfg::Label::Create("   Properties   "));
-		tilesettab->AppendPage(sfg::Label::Create(), sfg::Label::Create("   Directory   "));
+		tilesettab->AppendPage(directoryListing, sfg::Label::Create("   Directory   "));
 		tilesettab->SetRequisition(sf::Vector2f(170.f, 500.f));
 		scrolledwindow->SetRequisition(sf::Vector2f(170.f, 200.f));
 		tools->SetTitle("Tool window");
