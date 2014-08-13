@@ -15,16 +15,17 @@
 			sf::RectangleShape hoverRect;
 			sf::RenderWindow window;
 			sfg::Desktop desktop;
-			sfg::SFGUI m_sfgui;
-			sf::Event event;
-			sf::Clock clock;
+			sfg::SFGUI sfgui;
 
 			flume::Map map;
-			
 			unsigned int snapSize;
+
+			void update(const sf::Time& elapsedTime);
+			void handleEvents();
+			void render();
 
 		public:
 			Application();
 
-			void Run();
+			void run();
 	};

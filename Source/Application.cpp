@@ -10,10 +10,10 @@
 * ----------------------------------------------------------------------
 */
 Application::Application()
-	: window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "Flume Tiled Map Editor", sf::Style::None)
-	, map("nothing")
-	, hoverRect(sf::Vector2f(32,32))
-	, snapSize(TILE_SIZE)
+	: window {{SCREEN_WIDTH, SCREEN_HEIGHT, 32}, "Flume Tiled Map Editor", sf::Style::Close}
+	, map {"nothing"}
+	, hoverRect {{32, 32}}
+	, snapSize {TILE_SIZE}
 	{
 		auto box1 = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 0.0f);
 		auto box2 = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 0.0f);
@@ -102,33 +102,81 @@ Application::Application()
 * Description: Constructs an application.
 * ----------------------------------------------------------------------
 */
-	void Application::Run()
+	void Application::run()
 	{
+		// Some variables for a fixed timestep
+		sf::Clock clock {};
+		sf::Time lastUpdateTime {sf::Time::Zero};
+		const sf::Time frameTime = sf::seconds(1.f / 60.f);
+
 		window.resetGLStates();
 
-		while (window.isOpen()) {
-			while (window.pollEvent(event)) {
-				desktop.HandleEvent(event);
+		while (window.isOpen())
+		{
+			lastUpdateTime += clock.restart();
 
-				if (event.type == sf::Event::Closed) {
-					window.close();
-				}
+			while(lastUpdateTime > frameTime)
+			{
+				lastUpdateTime -= frameTime;
 
-				else if (event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-					window.close();
+				handleEvents();
+				update(frameTime);
 			}
 
-			sf::Vector2f mousePos = (sf::Vector2f) sf::Mouse::getPosition(window);
-			mousePos.x = (float) (mousePos.x - fmod(mousePos.x, snapSize));
-			mousePos.y = (float) (mousePos.y - fmod(mousePos.y, snapSize));
-			hoverRect.setPosition(mousePos);
+			render();
+		}
+	}
 
-			desktop.Update(clock.restart().asSeconds());
+/* ----------------------------------------------------------------------
+* Author: Julian
+* Date: 13th August 2014
+* Description: Updates the application.
+* ----------------------------------------------------------------------
+*/
+	void Application::update(const sf::Time& elapsedTime)
+	{
+		sf::Vector2f mousePos = static_cast<sf::Vector2f>(sf::Mouse::getPosition(window));
+		mousePos.x = static_cast<float>(mousePos.x - fmod(mousePos.x, snapSize));
+		mousePos.y = static_cast<float>(mousePos.y - fmod(mousePos.y, snapSize));
+		hoverRect.setPosition(mousePos);
 
-			window.clear(sf::Color(25,25,25));
-			window.draw(map.getMapGrid());
-			window.draw(hoverRect);
-			m_sfgui.Display(window);
-			window.display();
+		desktop.Update(elapsedTime.asSeconds());
+	}
+
+/* ----------------------------------------------------------------------
+* Author: Julian
+* Date: 13th August 2014
+* Description: Renders everything on screen.
+* ----------------------------------------------------------------------
+*/
+	void Application::render()
+	{
+		window.clear(sf::Color(25, 25, 25));
+
+		window.draw(map.getMapGrid());
+		window.draw(hoverRect);
+		sfgui.Display(window);
+
+		window.display();
+	}
+
+/* ----------------------------------------------------------------------
+* Author: Julian
+* Date: 13th August 2014
+* Description: Handles all window events.
+* ----------------------------------------------------------------------
+*/
+	void Application::handleEvents()
+	{
+		sf::Event event;
+		while(window.pollEvent(event))
+		{
+			desktop.HandleEvent(event);
+
+			if(event.type == sf::Event::Closed)
+				window.close();
+
+			else if(event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				window.close();
 		}
 	}

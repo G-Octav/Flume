@@ -10,11 +10,11 @@
 #include <string>
 #include <map>
 
-const int TILES_PER_ROW = 8;
-const int TILE_SIZE = 32;
+const unsigned int TILES_PER_ROW = 8;
+const unsigned int TILE_SIZE = 32;
 
-const int SCREEN_WIDTH = 1290;
-const int SCREEN_HEIGHT = 964;
+const unsigned int SCREEN_WIDTH = 1290;
+const unsigned int SCREEN_HEIGHT = 964;
 
 int toCategory(std::string string);
 

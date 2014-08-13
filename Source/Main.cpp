@@ -1,9 +1,17 @@
 #include "Application.hpp"
+#include <iostream>
 
 int main() 
 {
-	Application Flume;
-	Flume.Run();
+	try
+	{
+		Application Flume;
+		Flume.run();
+	}
+	catch(std::exception& exception)
+	{
+		std::cout << "Exception: " << exception.what() << std::endl;
+	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }
