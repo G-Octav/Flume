@@ -1,7 +1,5 @@
 #include <SFML/Graphics.hpp>
-
 #include "Application.hpp"
-#include "Stdafx.hpp"
 
 /* ----------------------------------------------------------------------
 * Author: Octav
@@ -11,7 +9,8 @@
 */
 Application::Application()
 	: window {{SCREEN_WIDTH, SCREEN_HEIGHT, 32}, "Flume Tiled Map Editor", sf::Style::Close}
-	, map {"nothing"}
+	, context {window}
+	, map {context, "nothing"}
 	, hoverRect {{32, 32}}
 	, snapSize {TILE_SIZE}
 	{

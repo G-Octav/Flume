@@ -1,11 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Window/Keyboard.hpp>
-#include <SFML/Graphics/Sprite.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/View.hpp>
+#include <SFML/Graphics.hpp>
 #include <sstream>
 #include <string>
 #include <map>
@@ -25,8 +20,6 @@ const sf::Color warning_color = sf::Color(225, 174, 0);
 const sf::Color collision_debug_color = sf::Color::Green;
 const sf::Color grid_color = sf::Color(50,50,50);
 
-
-
 // Convert enumerators to strings
 std::string toString(sf::Keyboard::Key key);
 
@@ -44,3 +37,14 @@ float dotProduct(const sf::Vector2f& vector1, const sf::Vector2f& vector2);
 float magnitude(const sf::Vector2f& vector);
 sf::Vector2f normalize(const sf::Vector2f&vector);
 std::string wrap(std::string text, size_t line_length = 35);
+
+class Context
+{
+	public:
+		Context(sf::RenderWindow& window)
+		: window {&window}
+		{}
+
+	private:
+		sf::RenderWindow* window;
+};
