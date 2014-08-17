@@ -18,7 +18,7 @@ Application::Application()
 		auto box2 = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 0.0f);
 		auto tools = sfg::Window::Create();
 		auto box = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 10.0f);
-		auto layersBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 5.0f);
+		auto layersBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 3.0f);
 		auto button_row = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL, 0.0f);
 		auto button_row2 = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL, 0.0f);
 		auto button1 = sfg::Button::Create("Save Map");
@@ -33,19 +33,25 @@ Application::Application()
 		auto infoframe = sfg::Frame::Create("info");
 		auto scrolledwindow = sfg::ScrolledWindow::Create();
 		auto tilesettab = sfg::Notebook::Create();
-		auto listBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
-		auto directoryListing = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
+		auto directoryListing = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 0.0f);
+		auto tilesetBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
 		window.setFramerateLimit(60);
 		window.setPosition(sf::Vector2i(0, 0));
+		window.resetGLStates();
+
+		for (int i = 0; i < 101; i++)
+			layersBox->Pack(sfg::CheckButton::Create("layer" + std::to_string(i)), true, true);
+
 		hoverRect.setFillColor(sf::Color(112,146,190));
 		tools->SetStyle(tools->GetStyle() ^ sfg::Window::TITLEBAR);
 		scrolledwindow->SetScrollbarPolicy(sfg::ScrolledWindow::HORIZONTAL_NEVER | sfg::ScrolledWindow::VERTICAL_AUTOMATIC);
-		tilesettab->AppendPage(sfg::Label::Create(), sfg::Label::Create("   Tileset   "));
+		scrolledwindow->AddWithViewport(layersBox);
+		scrolledwindow->SetRequisition(sf::Vector2f(170.f, 200.f));
+		tilesettab->AppendPage(tilesetBox, sfg::Label::Create("   Tileset   "));
 		tilesettab->AppendPage(sfg::Label::Create(), sfg::Label::Create("   Properties   "));
 		tilesettab->AppendPage(directoryListing, sfg::Label::Create("   Directory   "));
-		tilesettab->SetRequisition(sf::Vector2f(170.f, 500.f));
-		scrolledwindow->SetRequisition(sf::Vector2f(170.f, 200.f));
+		tilesettab->SetRequisition(sf::Vector2f(170.f, 483.f));
 		tools->SetTitle("Tool window");
 		tools->SetRequisition(sf::Vector2f(300.f, 0.f));
 
@@ -54,9 +60,6 @@ Application::Application()
 		auto infotext = sfg::Label::Create(frameText);
 		infotext->SetLineWrap(true);
 		infoframe->Add(infotext);
-
-		listBox->Pack(sfg::Label::Create("test"), true, true);
-		scrolledwindow->Add(listBox);
 
 		button_add_layer->SetId("addlayer");
 		button_remove_layer->SetId("removelayer");
@@ -83,7 +86,7 @@ Application::Application()
 		box1->Pack(button_row);
 		box1->Pack(button3, true);
 		box1->Pack(button_row2);
-		box1->Pack(scrolledwindow);
+		box1->Pack(scrolledwindow, false, true);
 
 		box2->Pack(tilesettab);
 
