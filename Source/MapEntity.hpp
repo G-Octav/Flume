@@ -28,7 +28,7 @@
 			/* ---------- Getters -------------- */
 
 			std::map<std::string, bool>& getProperties();
-			sf::Vector2f& getRelativePosition();
+			sf::Vector2f getRelativePosition();
 			sf::Vector2f& getPosition();
 			int& getWidth();
 			int& getHeight();

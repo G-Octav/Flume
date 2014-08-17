@@ -29,7 +29,7 @@
 * Description: Returns the relative position (in tiles)
 * ----------------------------------------------------------------------
 */
-	sf::Vector2f& MapEntity::getRelativePosition()
+	sf::Vector2f MapEntity::getRelativePosition()
 	{
 		return sf::Vector2f(position.x / TILE_SIZE, position.y / TILE_SIZE);
 	}
@@ -86,7 +86,7 @@
 */
 	bool MapEntity::isFlippedX() 
 	{
-		return isFlippedX;
+		return flippedX;
 	}
 
 /* ----------------------------------------------------------------------
@@ -97,7 +97,7 @@
 */
 	bool MapEntity::isFlippedY() 
 	{
-		return isFlippedY;
+		return flippedY;
 	}
 
 /* ----------------------------------------------------------------------
@@ -133,8 +133,8 @@
 */
 	void MapEntity::setRelativePosition(int x, int y)
 	{
-		position.x = x * TILE_SIZE;
-		position.y = y * TILE_SIZE;
+		position.x = (float) x * TILE_SIZE;
+		position.y = (float) y * TILE_SIZE;
 	}
 
 /* ----------------------------------------------------------------------
@@ -189,7 +189,7 @@
 */
 	void MapEntity::flipHorizontally()
 	{
-		flippedX = !isFlippedX;
+		flippedX = !flippedX;
 	}
 
 /* ----------------------------------------------------------------------
@@ -200,7 +200,7 @@
 */
 	void MapEntity::flipVertically()
 	{
-		flippedY = !isFlippedY;
+		flippedY = !flippedY;
 	}
 
 /* ----------------------------------------------------------------------
