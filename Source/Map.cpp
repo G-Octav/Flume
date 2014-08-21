@@ -14,8 +14,8 @@
 		{
 			sf::Vertex tile[2];
 
-			tile[0].position = sf::Vector2f(x, 0);
-			tile[1].position = sf::Vector2f(x, (float)SCREEN_HEIGHT);
+			tile[0].position = {x, 0};
+			tile[1].position = {x, static_cast<float>(SCREEN_HEIGHT)};
 
 			tile[0].color = grid_color;
 			tile[1].color = grid_color;
@@ -28,8 +28,8 @@
 		{
 			sf::Vertex tile[2];
 
-			tile[0].position = sf::Vector2f(0, y);
-			tile[1].position = sf::Vector2f((float)SCREEN_WIDTH, y);
+			tile[0].position = {0, y};
+			tile[1].position = {static_cast<float>(SCREEN_WIDTH), y};
 
 			tile[0].color = grid_color;
 			tile[1].color = grid_color;

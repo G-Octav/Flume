@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <fstream>
 #include "Application.hpp"
 
 /* ----------------------------------------------------------------------
@@ -7,13 +8,16 @@
 * Description: Constructs an application.
 * ----------------------------------------------------------------------
 */
-Application::Application()
-	: window {{SCREEN_WIDTH, SCREEN_HEIGHT, 32}, "Flume Tiled Map Editor", sf::Style::Close}
+	Application::Application()
+	: window {}
 	, context {window}
 	, map {context, "nothing"}
 	, hoverRect {{32, 32}}
 	, snapSize {TILE_SIZE}
+	, windowStyle {sf::Style::Close}
 	{
+		loadResolution();
+
 		auto box1 = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 0.0f);
 		auto box2 = sfg::Box::Create(sfg::Box::Orientation::VERTICAL, 0.0f);
 		auto tools = sfg::Window::Create();
@@ -181,4 +185,51 @@ Application::Application()
 			else if(event.type == sf::Event::KeyPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
 		}
+	}
+
+/* ----------------------------------------------------------------------
+* Author: Julian
+* Date: 21 August 2014
+* Description: Loads the resolution
+* ----------------------------------------------------------------------
+*/
+	void Application::loadResolution()
+	{
+		// Open the resolution file
+		std::ifstream resolutionFile {"Content/Saves/resolution.cff", std::ios::binary};
+		if(resolutionFile)
+		{
+			// Load the resolution
+			unsigned int width, height;
+			resolutionFile.read(reinterpret_cast<char*>(&width), sizeof(unsigned int));
+			resolutionFile.read(reinterpret_cast<char*>(&height), sizeof(unsigned int));
+			resolutionFile.read(reinterpret_cast<char*>(&windowStyle), sizeof(sf::Uint8));
+
+			// Check if the loaded resolution is valid
+			bool valid {false};
+			std::vector<sf::VideoMode> modeList {sf::VideoMode::getFullscreenModes()};
+			for(auto& mode : modeList)
+			{
+				// Valid, if width AND height are supported
+				if(mode.width == width && mode.height == height)
+				{
+					valid = true;
+					break;
+				}
+			}
+
+			// Recreate the window
+			if(valid)
+				window.create({width, height}, "Flume Tiled Map Editor", windowStyle);
+			else
+				window.create({800, 600}, "Flume Tiled Map Editor", windowStyle);
+		}
+		else
+		{
+			// Create the default window, if no resolution file is saved
+			window.create({800, 600}, "Flume Tiled Map Editor", windowStyle);
+		}
+
+		// Don't forget to close the file
+		resolutionFile.close();
 	}

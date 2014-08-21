@@ -18,6 +18,7 @@
 		private:
 			sf::RectangleShape hoverRect;
 			sf::RenderWindow window;
+			sf::Uint8 windowStyle;
 			sfg::Desktop desktop;
 			sfg::SFGUI sfgui;
 			Context context;
@@ -26,6 +27,7 @@
 			unsigned int snapSize;
 
 			void update(const sf::Time& elapsedTime);
+			void loadResolution();
 			void handleEvents();
 			void render();
 	};
